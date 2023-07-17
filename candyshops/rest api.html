@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Candy shop</title>
+    <style>
+        body{
+            background-image: url(https://media.architecturaldigest.com/photos/55e7658d302ba71f3016531d/4:3/w_800,h_600,c_limit/dam-images-architecture-2015-02-candy-shops-beautiful-candy-shops-01-dylans-candy-bar.jpg);
+            color: white;
+            font-size: larger;
+        }
+        h1{
+            color:rgb(239, 246, 30);
+            font-size: 50px;
+        }
+        .container{
+            color: white;
+            font-size: xx-large;
+            text-align: center;
+            margin-top: 60px;
+            
+        
+        }
+        #my-form{
+            color: blue;
+        }
+        
+    </style>
+    
+</head>
+
+<body>
+    <div class="container">
+
+        <h1>Candy shop seller dashboard</h1>
+        
+        <form id="my-form" onsubmit="onSubmit(event)">
+            <label for="candy">CandyName:</label>
+            <input type="text" id="candy">
+            
+            <label for="description">Description</label>
+            <input type="text" id="description">
+            
+            <label for="price">Price</label>
+            <input type="text" id="price">
+            
+            <label for="quantity">Quantity</label>
+            <input type="text" id="quantity">
+            <input id="submit_btn" class="btn" type="submit" value="Add Item" />
+        </form>
+    </div>
+    <ul id="ulid"></ul>
+    <ul class="items">
+        <li id="item3" class="item"></li>
+    </ul>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js"></script>
+        <script>
+            const arr = [];
+        function onSubmit(event) {
+            event.preventDefault();
+            let candy = event.target.candy.value;
+            let description = event.target.description.value;
+            let price = event.target.price.value;
+            let quantity = event.target.quantity.value;
+            
+            let obj = { candy, description, price, quantity };
+            
+            axios.post("https://crudcrud.com/api/bffc1c56f3fb4016a8ce1f5e6c2848f1/candyshops",obj)
+            .then((response)=>{
+                console.log(response)
+            })
+            .catch((err)=>{
+                console.log(err)
+            })
+            // //  localStorage.setItem("details", JSON.stringify(obj));
+            displayDetails(obj);
+        }
+        
+        function displayDetails(obj) {
+            const parentElement = document.getElementById("item3");
+            const child = document.createElement("li");
+            child.textContent = `candy:${obj.candy},description:${obj.description},price:${obj.price},quantity:${obj.quantity}`;
+            parentElement.appendChild(child);
+        
+               //delete button
+               const btn = document.createElement("input");
+            btn.type = "button";
+            btn.value = "delete";
+            child.appendChild(btn);
+
+            btn.onclick = () => {
+                parentElement.removeChild(child);
+                localStorage.removeItem(obj.candy);
+            };
+            //edit button
+            const edit_btn = document.createElement("input");
+            edit_btn.type = "button";
+            edit_btn.value = "edit";
+            child.appendChild(edit_btn);
+
+            edit_btn.onclick = () => {
+                parentElement.removeChild(child);
+                localStorage.removeItem(obj.candy);
+                document.getElementById("candy").value = obj.candy;
+                document.getElementById("description").value = obj.description;
+                document.getElementById("price").value = obj.price;
+                document.getElementById("quantity").value = obj.quantity;
+                localStorage.getItem(details);
+            };
+        }
+        
+        </script>
+
+
+</body>
+</html>
